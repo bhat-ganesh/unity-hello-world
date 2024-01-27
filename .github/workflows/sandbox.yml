@@ -6,12 +6,13 @@ on:
 jobs:
     sandbox:
         runs-on: [self-hosted, Linux]
-        matrix:
-            target:
-              - platform: StandaloneWindows64
-                channel: windows
-              - platform: StandaloneOSX
-                channel: mac
+        strategy:
+          matrix:
+              target:
+                - platform: StandaloneWindows64
+                  channel: windows
+                - platform: StandaloneOSX
+                  channel: mac
         steps:
         - name: running ${{ matrix.target.platform }} on ${{ matrix.target.channel }}
           run: |
