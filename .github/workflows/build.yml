@@ -8,12 +8,11 @@ jobs:
         runs-on: [self-hosted, Linux]
         strategy:
             matrix:
-                target:
-                  - StandaloneWindows64
-                  - StandaloneOSX
-                channel:
-                  - windows
-                  - mac
+              target:
+                - platform: StandaloneWindows64
+                  channel: windows
+                - platform: StandaloneOSX
+                  channel: mac
         steps:
             - name: Checkout
               uses: actions/checkout@v4
@@ -35,7 +34,7 @@ jobs:
               with:
                 githubToken: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: Build ${{ matrix.channel }} project
+            - name: Build ${{ matrix.target.channel }} project
               uses: game-ci/unity-builder@v4
               env:
                 UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
@@ -43,7 +42,7 @@ jobs:
                 UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}                
               with:
                 allowDirtyBuild: true
-                targetPlatform: ${{ matrix.target }}
+                targetPlatform: ${{ matrix.target.platform }}
       
             - name: Upload build artifact
               uses: actions/upload-artifact@v3
@@ -51,12 +50,12 @@ jobs:
                 name: Build
                 path: build
 
-            - name: Upload ${{ matrix.channel }} build to itch.io
+            - name: Upload ${{ matrix.target.channel }} build to itch.io
               uses: robpc/itchio-upload-action@v1
               with:
                 path: build
                 project: "bhat-ganesh/unity-hello-world"
-                channel: ${{ matrix.channel }}
+                channel: ${{ matrix.target.channel }}
                 version: ${{ github.run_number }}
                 api-key: ${{ secrets.ITCHIO_API_KEY }}
 
@@ -64,7 +63,7 @@ jobs:
               uses: slackapi/slack-github-action@v1.25.0
               with:
                 channel-id: 'C06FXM8PZ5G'
-                slack-message: "${{ matrix.channel }} build #${{ github.run_number }}: ${{ job.status }}.\n
+                slack-message: "${{ matrix.target.channel }} build #${{ github.run_number }}: ${{ job.status }}.\n
                                 Download logs here https://github.com/${{ github.actor }}/${{ github.event.repository.name }}/actions/runs/${{ github.run_id }}\n
                                 Download builds here https://${{ github.actor }}.itch.io/${{ github.event.repository.name }}"
               env:
