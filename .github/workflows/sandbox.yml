@@ -1,0 +1,16 @@
+name: Sandbox Workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+    sandbox:
+        runs-on: [self-hosted, macOS]
+        container: node:21
+        steps:
+            - name: Run
+              run: |
+                  echo "Hello World"
+                  echo "github.workspace = ${{ github.workspace }}"
+                  node --version
+                  npm --version
