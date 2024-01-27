@@ -3,6 +3,8 @@ name: Build Unity client
 on:
   workflow_dispatch:
 
+permissions: read-all
+
 jobs:
     build-unity:
         runs-on: [self-hosted, Linux]
