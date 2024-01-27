@@ -56,6 +56,7 @@ jobs:
               uses: slackapi/slack-github-action@v1.25.0
               with:
                 channel-id: 'C06FXM8PZ5G'
-                slack-message: "GitHub build result: ${{ job.status }}"
+                slack-message: "GitHub build result: ${{ job.status }}.\n
+                                Download builds here https://${{ github.actor }}.itch.io/${{ github.event.repository.name }}"
               env:
                 SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
