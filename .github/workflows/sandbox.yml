@@ -22,18 +22,8 @@ jobs:
               uses: slackapi/slack-github-action@v1.25.0
               with:
                 channel-id: 'C06FXM8PZ5G'
-                slack-messsage: {
-                                  "blocks": [
-                                    {
-                                      "type": "section",
-                                      "text": {
-                                        "type": "mrkdwn",
-                                        "text": "Build ${{ github.run_number }}: *${{ job.status }}*.\n
-                Download logs <https://github.com/${{ github.actor }}/${{ github.event.repository.name }}/actions/runs/${{ github.run_id }}|here>\n
-                Download builds <https://${{ github.actor }}.itch.io/${{ github.event.repository.name }}|here>"
-                                      }
-                                    }
-                                  ]
-                                }
+                slack-message: "Build ${{ github.run_number }}: ${{ job.status }}.\n
+                                Download logs here https://github.com/${{ github.actor }}/${{ github.event.repository.name }}/actions/runs/${{ github.run_id }}\n
+                                Download builds here https://${{ github.actor }}.itch.io/${{ github.event.repository.name }}"
               env:
                 SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
