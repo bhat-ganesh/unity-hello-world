@@ -6,6 +6,14 @@ on:
 jobs:
     build-unity:
         runs-on: [self-hosted, Linux]
+        strategy:
+            matrix:
+                target:
+                  - StandaloneWindows64
+                  - StandaloneOSX
+                channel:
+                  - windows
+                  - mac
         steps:
             - name: Checkout
               uses: actions/checkout@v4
@@ -27,7 +35,7 @@ jobs:
               with:
                 githubToken: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: Build project
+            - name: Build ${{ matrix.channel }} project
               uses: game-ci/unity-builder@v4
               env:
                 UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
@@ -35,7 +43,7 @@ jobs:
                 UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}                
               with:
                 allowDirtyBuild: true
-                targetPlatform: StandaloneWindows64
+                targetPlatform: ${{ matrix.target }}
       
             - name: Upload build artifact
               uses: actions/upload-artifact@v3
@@ -43,12 +51,12 @@ jobs:
                 name: Build
                 path: build
 
-            - name: Upload to itch.io
+            - name: Upload ${{ matrix.channel }} build to itch.io
               uses: robpc/itchio-upload-action@v1
               with:
                 path: build
                 project: "bhat-ganesh/unity-hello-world"
-                channel: "windows"
+                channel: ${{ matrix.channel }}
                 version: ${{ github.run_number }}
                 api-key: ${{ secrets.ITCHIO_API_KEY }}
 
@@ -56,7 +64,8 @@ jobs:
               uses: slackapi/slack-github-action@v1.25.0
               with:
                 channel-id: 'C06FXM8PZ5G'
-                slack-message: "GitHub build result: ${{ job.status }}.\n
+                slack-message: "${{ matrix.channel }} build #${{ github.run_number }}: ${{ job.status }}.\n
+                                Download logs here https://github.com/${{ github.actor }}/${{ github.event.repository.name }}/actions/runs/${{ github.run_id }}\n
                                 Download builds here https://${{ github.actor }}.itch.io/${{ github.event.repository.name }}"
               env:
                 SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
