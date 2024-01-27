@@ -51,3 +51,11 @@ jobs:
                 channel: "windows"
                 version: ${{ github.run_number }}
                 api-key: ${{ secrets.ITCHIO_API_KEY }}
+
+            - name: Notify Slack channel
+              uses: slackapi/slack-github-action@v1.25.0
+              with:
+                channel-id: 'C06FXM8PZ5G'
+                slack-message: "GitHub build result: ${{ job.status }}"
+              env:
+                SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
