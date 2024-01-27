@@ -5,8 +5,8 @@ on:
 
 jobs:
     sandbox:
-        runs-on: [self-hosted, macOS]
-        container: node:21
+        runs-on: [self-hosted, Linux]
+        # container: node:21
         steps:
             - name: Run
               run: |
