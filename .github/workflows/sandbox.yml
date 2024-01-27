@@ -6,24 +6,36 @@ on:
 jobs:
     sandbox:
         runs-on: [self-hosted, Linux]
-        # container: node:21
+        matrix:
+            target:
+              - platform: StandaloneWindows64
+                channel: windows
+              - platform: StandaloneOSX
+                channel: mac
         steps:
-            - name: Run
-              run: |
-                  echo "Hello World"
-                  echo "github.workspace = ${{ github.workspace }}"
-                  echo "github.event.repository.name = ${{ github.event.repository.name }}"
-                  echo "github.actor = ${{ github.actor }}"
+        - name: running ${{ matrix.target.platform }} on ${{ matrix.target.channel }}
+          run: |
+            echo "Hello World"
+            
 
-            #       node --version
-            #       npm --version
+        # # container: node:21
+        # steps:
+        #     - name: Run
+        #       run: |
+        #           echo "Hello World"
+        #           echo "github.workspace = ${{ github.workspace }}"
+        #           echo "github.event.repository.name = ${{ github.event.repository.name }}"
+        #           echo "github.actor = ${{ github.actor }}"
 
-            - name: Post to a Slack channel
-              uses: slackapi/slack-github-action@v1.25.0
-              with:
-                channel-id: 'C06FXM8PZ5G'
-                slack-message: "Build ${{ github.run_number }}: ${{ job.status }}.\n
-                                Download logs here https://github.com/${{ github.actor }}/${{ github.event.repository.name }}/actions/runs/${{ github.run_id }}\n
-                                Download builds here https://${{ github.actor }}.itch.io/${{ github.event.repository.name }}"
-              env:
-                SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        #     #       node --version
+        #     #       npm --version
+
+        #     - name: Post to a Slack channel
+        #       uses: slackapi/slack-github-action@v1.25.0
+        #       with:
+        #         channel-id: 'C06FXM8PZ5G'
+        #         slack-message: "Build ${{ github.run_number }}: ${{ job.status }}.\n
+        #                         Download logs here https://github.com/${{ github.actor }}/${{ github.event.repository.name }}/actions/runs/${{ github.run_id }}\n
+        #                         Download builds here https://${{ github.actor }}.itch.io/${{ github.event.repository.name }}"
+        #       env:
+        #         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
