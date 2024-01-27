@@ -5,7 +5,7 @@ on:
 
 jobs:
     build-unity:
-        runs-on: [self-hosted, macOS]
+        runs-on: [self-hosted, Linux]
         steps:
             - name: Checkout
               uses: actions/checkout@v4
@@ -34,11 +34,11 @@ jobs:
                 name: Build
                 path: build
 
-            # - name: Upload to itch.io
-            #   uses: robpc/itchio-upload-action@v1
-            #   with:
-            #     path: build
-            #     project: "bhat-ganesh/unity-hello-world"
-            #     channel: "webgl"
-            #     version: ${{ github.run_number }}
-            #     api-key: ${{ secrets.ITCHIO_API_KEY }}
+            - name: Upload to itch.io
+              uses: robpc/itchio-upload-action@v1
+              with:
+                path: build
+                project: "bhat-ganesh/unity-hello-world"
+                channel: "webgl"
+                version: ${{ github.run_number }}
+                api-key: ${{ secrets.ITCHIO_API_KEY }}
