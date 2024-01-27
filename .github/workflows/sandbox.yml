@@ -13,21 +13,15 @@ jobs:
                   echo "Hello World"
                   echo "github.workspace = ${{ github.workspace }}"
                   echo "github.event.repository.name = ${{ github.event.repository.name }}"
-                  echo "github.event.org.login = ${{ github.event.org.login }}"
-                  echo "github.event.actor.login = ${{ github.event.actor.login }}"
+                  echo "github.actor = ${{ github.actor }}"
 
             #       node --version
             #       npm --version
 
-            # - name: Post to a Slack channel
-            #   id: slack
-            #   uses: slackapi/slack-github-action@v1.25.0
-            #   with:
-            #     # Slack channel id, channel name, or user id to post message.
-            #     # See also: https://api.slack.com/methods/chat.postMessage#channels
-            #     # You can pass in multiple channels to post to by providing a comma-delimited list of channel IDs.
-            #     channel-id: 'C06FXM8PZ5G'
-            #     # For posting a simple plain text message
-            #     slack-message: "GitHub build result: ${{ job.status }}"
-            #   env:
-            #     SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+            - name: Post to a Slack channel
+              uses: slackapi/slack-github-action@v1.25.0
+              with:
+                channel-id: 'C06FXM8PZ5G'
+                slack-message: "GitHub build result: ${{ job.status }}. visit https://${{ github.actor }}.itch.io/${{ github.event.repository.name }}"
+              env:
+                SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
