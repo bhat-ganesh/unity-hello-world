@@ -44,10 +44,10 @@ jobs:
                 allowDirtyBuild: true
                 targetPlatform: ${{ matrix.target.platform }}
       
-            - name: Upload build artifact
+            - name: Upload ${{ matrix.target.channel }} build artifact
               uses: actions/upload-artifact@v3
               with:
-                name: Build
+                name: ${{ matrix.target.channel }} build
                 path: build
 
             - name: Upload ${{ matrix.target.channel }} build to itch.io
@@ -63,7 +63,7 @@ jobs:
               uses: slackapi/slack-github-action@v1.25.0
               with:
                 channel-id: 'C06FXM8PZ5G'
-                slack-message: "${{ matrix.target.channel }} build #${{ github.run_number }}: ${{ job.status }}.\n
+                slack-message: "${{ github.event.repository.name }} ${{ matrix.target.channel }} build #${{ github.run_number }}: ${{ job.status }}.\n
                                 Download logs here https://github.com/${{ github.actor }}/${{ github.event.repository.name }}/actions/runs/${{ github.run_id }}\n
                                 Download builds here https://${{ github.actor }}.itch.io/${{ github.event.repository.name }}"
               env:
